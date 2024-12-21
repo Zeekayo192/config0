@@ -1,0 +1,5 @@
+{
+    "username": "user",
+    "virtual_fs": "virtual_fs.zip",
+    "startup_script": "script.txt"
+}
