@@ -1,0 +1,9 @@
+namei = 42
+nametwo = 52
+names = "Hello, World"
+namem = {keyi = 100, keys = "Nested String"}
+
+resultsum = #(namei + 1) 
+resultsub = #(nametwo - 50)  
+resultord = #(ord("A"))
+resultmul = #(namei * nametwo) 
