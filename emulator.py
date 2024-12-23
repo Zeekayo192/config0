@@ -3,12 +3,11 @@ import zipfile
 import sys
 import argparse
 import json
-import shutil
 import subprocess
 
 class ShellEmulator:
     def __init__(self, config):
-        self.current_path = "/"
+        self.current_path = ""
         self.history = []
         self.username = config['username']
         self.virtual_fs_path = config['virtual_fs']
@@ -35,9 +34,8 @@ class ShellEmulator:
             print("Ошибка: Файл виртуальной файловой системы не найден.")
             sys.exit(1)
 
-        # Open the zip archive and create a directory for the virtual file system
+        # Open the zip archive
         self.virtual_fs = zipfile.ZipFile(self.virtual_fs_path, 'r')
-        self.virtual_fs.extractall("virtual_fs")
 
     def execute_startup_script(self):
         if os.path.exists(self.startup_script):
@@ -46,37 +44,43 @@ class ShellEmulator:
                     self.execute_command(command.strip())
 
     def list_files(self):
-        path = f"virtual_fs{self.current_path}"
+        # Если в корне, текущий путь - пустая строка, иначе добавляем "/"
+        path = self.current_path + "/" if self.current_path else ""
         try:
-            files = os.listdir(path)
+            # Собираем файлы и папки, непосредственно находящиеся в текущем каталоге
+            files = set()
+            for info in self.virtual_fs.infolist():
+                if info.filename.startswith(path) and info.filename != path:
+                    # Получаем элемент на текущем уровне (папка или файл)
+                    relative_path = info.filename[len(path):].split('/')[0]
+                    files.add(relative_path)
             if files:
-                print("\n".join(files))
+                print("\n".join(sorted(files)))
             else:
                 print("Пустая директория")
-        except FileNotFoundError:
+        except KeyError:
             print("Директория не найдена")
+
 
     def change_directory(self, path):
         if path == "..":
-            if self.current_path != "/":
-                self.current_path = os.path.dirname(self.current_path) or "/"
-            else:
-                print("Вы находитесь в корневой директории.")
+            if self.current_path:
+                self.current_path = "/".join(self.current_path.strip("/").split("/")[:-1])
         else:
-            new_path = os.path.join(f"virtual_fs{self.current_path}", path)
-            if os.path.isdir(new_path):
-                self.current_path = os.path.join(self.current_path, path)
+            new_path = f"{self.current_path}/{path}".strip("/")
+            if any(info.filename.startswith(new_path + "/") for info in self.virtual_fs.infolist()):
+                self.current_path = new_path
             else:
                 print("Директория не найдена.")
 
     def print_working_directory(self):
-        print(f"{self.username}:{self.current_path}")
+        print(f"/{self.current_path}" if self.current_path else "/")
 
     def clear_screen(self):
         subprocess.call('cls' if os.name == 'nt' else 'clear', shell=True)
 
     def uname(self):
-        print("Windows") 
+        print("UNIX-like Shell Emulator")
 
     def exit_shell(self):
         print("Выход из эмулятора.")
@@ -122,7 +126,7 @@ if __name__ == "__main__":
 
     while True:
         try:
-            command = input(f"{config['username']}:{emulator.current_path} $ ")
+            command = input(f"{config['username']}:{emulator.current_path or '/'} $ ")
             emulator.execute_command(command.strip())
         except EOFError:
             emulator.exit_shell()
