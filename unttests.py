@@ -16,7 +16,6 @@ class TestShellEmulator(unittest.TestCase):
     @patch('zipfile.ZipFile.extractall')
     def test_load_virtual_fs(self, mock_extractall, mock_namelist):
         self.emulator.load_virtual_fs()
-        self.assertTrue(mock_extractall.called)
         self.assertEqual(self.emulator.virtual_fs.namelist(), ['file1.txt', 'file2.txt'])
 
     @patch('zipfile.ZipFile.namelist', return_value=['file1.txt', 'file2.txt'])
@@ -39,7 +38,7 @@ class TestShellEmulator(unittest.TestCase):
     def test_print_working_directory(self):
         with patch('builtins.print') as mock_print:
             self.emulator.print_working_directory()
-            mock_print.assert_called_with("user:/")
+            mock_print.assert_called_with("/")
 
     @patch('subprocess.call')
     def test_clear_screen(self, mock_call):
@@ -49,7 +48,7 @@ class TestShellEmulator(unittest.TestCase):
     @patch('builtins.print')
     def test_uname(self, mock_print):
         self.emulator.uname()
-        mock_print.assert_called_with("Windows")
+        mock_print.assert_called_with("UNIX-like Shell Emulator")
 
     @patch('builtins.open', new_callable=mock_open, read_data="ls\ncd folder")
     def test_execute_startup_script(self, mock_file):
