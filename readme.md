@@ -1,63 +1,46 @@
-# 1. Клонирование репозитория
+# Установка
+1. Установка программы и переход в директорию
+   ```bash
+   git clone <URL репозитория>
+   cd <директория проекта>
+   ```
+2. Создайте и активируйте виртуальное окружение:
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate  # Для Linux/Mac
+   venv\Scripts\activate     # Для Windows
+   ```
+3. Установите необходимые зависимости :
+   ```bash
+   Зависимости не требуются
+   ```
 
-Склонируйте репозиторий с исходным кодом и тестами:
+# Запуск скрипта
 
-```
-git clone <URL репозитория>
-cd <директория проекта>
-```
-
-# 2. Установка зависимостей при запуске
-
-```
-pip install tkinter
-pip install zipfile
-pip install argparse
-pip install shutil
-
-```
-
-# Создайте виртуальное окружение
+Скрипт принимает текст конфигурационного файла через файл и выводит json в стандартный вывод.
 
 ```bash
-# Активируйте виртуальное окружение
-python -m venv venv
-# Для Windows:
-venv\Scripts\activate
-# Для MacOS/Linux:
-source venv/bin/activate
+ py hw3.py input.txt
 ```
 
-
-# 3. Структура проекта
-Проект содержит следующие файлы и директории:
-```bash
-unittests.py              # файл для тестирования
-virtual_fs.zip           # zip-архив в качестве образа файловой системы
-emulator.py                  # файл с программой
-config.json                     #конфиг
-script.txt                      #стартовый скрипт
+# Вывод 
+```
+{
+    "namei": 42,
+    "nametwo": 52,
+    "names": "Hello, World",
+    "namem": {
+        "keyi": 100,
+        "keys": "Nested String"
+    },
+    "resultsum": 43,
+    "resultsub": 2,
+    "resultord": 65,
+    "resultmul": 2184
+}
 ```
 
-# 4. Запуск проекта
+# Unittest
 ```bash
-py emulator.py config.json    # py название файла <файл с конфигом>
-```
-
-# 5. Команды 
-```bash
-ls
-cd <dir>
-history
-exit
-clear
-history
-pwd
-uname
-```
-
-# 6. Unittest
-```bash
-pip install unittest
-py -m unittest unttests.py
+py -m unittest unittests.py
 ```
