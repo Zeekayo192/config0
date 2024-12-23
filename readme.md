@@ -10,10 +10,7 @@ cd <директория проекта>
 # 2. Установка зависимостей при запуске
 
 ```
-pip install tkinter
-pip install zipfile
-pip install argparse
-pip install shutil
+pip install subprocess
 
 ```
 
@@ -33,31 +30,20 @@ source venv/bin/activate
 Проект содержит следующие файлы и директории:
 ```bash
 unittests.py              # файл для тестирования
-virtual_fs.zip           # zip-архив в качестве образа файловой системы
-emulator.py                  # файл с программой
-config.json                     #конфиг
-script.txt                      #стартовый скрипт
+hw2.py                  # файл с программой
+output.png             # файл с выводом программы 
 ```
 
 # 4. Запуск проекта
 ```bash
-py emulator.py config.json    # py название файла <файл с конфигом>
+npm install -g @mermaid-js/mermaid-cli
+py hw2.py C:\Users\user\AppData\Roaming\npm\mmdc.cmd C:\Users\user\Desktop\Test111 output.png 2024-01-01     
+# py hw2.py <путь к mermaid визуализатору> <путь к репозиторию> <выходной файл> <дата(гггг-мм-дд)>
 ```
 
-# 5. Команды 
+
+# 5. Unittest
 ```bash
-ls
-cd <dir>
-history
-exit
-clear
-history
-pwd
-uname
+py -m unittest unittests.py
 ```
 
-# 6. Unittest
-```bash
-pip install unittest
-py -m unittest unttests.py
-```
